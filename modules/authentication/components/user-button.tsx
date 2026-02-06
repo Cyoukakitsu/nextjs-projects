@@ -16,14 +16,14 @@ import { Badge } from "@/components/ui/badge";
 import { signOut } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
-interface UserButtonUser {
+type UserButtonUser = {
   name: string | null;
   email: string;
   image?: string | null;
   createdAt: Date;
 }
 
-interface UserButtonProps {
+type UserButtonProps = {
   user: UserButtonUser | null;
   onSettings?: () => void;
   onProfile?: () => void;
