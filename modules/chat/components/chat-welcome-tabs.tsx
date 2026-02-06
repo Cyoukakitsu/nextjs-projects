@@ -48,13 +48,18 @@ const CHAT_TAB_MESSAGE = [
   },
 ];
 
-const ChatWelcomeTabs = ({ userName, onMessageSelect }) => {
+type ChatWelcomeTabsProps = {
+  userName: string;
+  onMessageSelect: (message: string) => void;
+};
+
+const ChatWelcomeTabs = ({ userName, onMessageSelect }: ChatWelcomeTabsProps) => {
   const [activeTab, setActiveTab] = useState(0);
 
   return (
-    <div className="flex flex-col items-center justify-center px-4">
+    <div className="flex flex-col items-center justify-center px-4 w-full overflow-hidden">
       <div className="w-full max-w-3xl space-y-8">
-        <h1 className="text-3xl font-bold text-foreground">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground wrap-break-word">
           How can i help you,{" "}
           {userName.slice(0, userName.indexOf(" ")) || "User"}?
         </h1>
@@ -68,7 +73,7 @@ const ChatWelcomeTabs = ({ userName, onMessageSelect }) => {
                 setActiveTab(index);
                 onMessageSelect(tab.messages[0]);
               }}
-              className="w-27.5 justify-start"
+              className="shrink-0 min-w-0 justify-start"
             >
               {tab.icon}
               {tab.tabName}
