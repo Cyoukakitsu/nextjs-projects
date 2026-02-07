@@ -6,11 +6,25 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
 import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
+import { ModelSelector } from "./model-selector";
+import { useAIModels } from "@/modules/ai-agent/hook/ai-agent";
 
-export default function ChatMessageForm({ initialMessage, onMessageChange }) {
-  // const { data: models, isPending, error } = useAIModels();
+type ChatMessageFormProps = {
+  initialMessage?: string;
+  onMessageChange?: (message: string) => void;
+};
+
+export default function ChatMessageForm({
+  initialMessage,
+  onMessageChange,
+}: ChatMessageFormProps) {
+  const { data: models, isPending } = useAIModels();
 
   const [message, setMessage] = useState("");
+  const [selectedModel, setSelectedModel] = useState(
+    models?.models?.[0]?.id ?? "",
+  );
 
   useEffect(() => {
     if (initialMessage) {
@@ -19,7 +33,7 @@ export default function ChatMessageForm({ initialMessage, onMessageChange }) {
     }
   }, [initialMessage, onMessageChange]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     try {
       e.preventDefault();
 
@@ -54,20 +68,20 @@ export default function ChatMessageForm({ initialMessage, onMessageChange }) {
           {/* Toolbar */}
           <div className="flex items-center justify-between gap-2 px-3 py-2 border-t ">
             {/* Left side tools */}
-            {/* <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1">
               {isPending ? (
                 <>
                   <Spinner />
                 </>
               ) : (
                 <ModelSelector
-                  models={models?.models}
+                  models={models?.models ?? []}
                   selectedModelId={selectedModel}
                   onModelSelect={setSelectedModel}
                   className="ml-1"
                 />
               )}
-            </div> */}
+            </div>
 
             {/* Submit Button */}
             <Button
