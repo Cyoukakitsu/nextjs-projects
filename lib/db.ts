@@ -1,3 +1,5 @@
+//这是数据库连接配置文件，创建并导出 Prisma 客户端实例，用于在应用中访问数据库。
+
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";

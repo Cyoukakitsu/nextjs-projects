@@ -1,3 +1,5 @@
+//这是登录页面组件，提供 GitHub 社交登录按钮，用户点击后跳转到 GitHub 进行身份验证。
+
 "use client";
 
 import { signIn } from "@/lib/auth-client";
@@ -19,6 +21,8 @@ const Page = () => {
         variant="default"
         className="max-w-sm mt-5 w-full px-7 py-7 flex flex-row justify-center items-center cursor-pointer"
         onClick={() =>
+          
+        //使用 signIn.social() 进行社交登录，跳转到 GitHub 进行授权
           signIn.social({
             provider: "github",
             callbackURL: "/",

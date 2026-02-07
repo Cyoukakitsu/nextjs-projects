@@ -68,6 +68,9 @@ const ChatWelcomeTabs = ({ userName, onMessageSelect }: ChatWelcomeTabsProps) =>
           {CHAT_TAB_MESSAGE.map((tab, index) => (
             <Button
               key={tab.tabName}
+
+              //如果当前标签是激活的：使用 "default" 样式（高亮）
+              //否则使用 "outline" 样式（灰色）
               variant={activeTab === index ? "default" : "outline"}
               onClick={() => {
                 setActiveTab(index);

@@ -1,3 +1,5 @@
+//服务器端认证实例，用于服务器端验证和数据库操作。
+
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import db from "./db";

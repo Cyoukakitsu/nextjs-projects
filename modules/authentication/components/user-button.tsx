@@ -1,3 +1,4 @@
+//这是用户按钮组件，显示用户头像和下拉菜单，提供用户信息展示、设置选项和登出功能。
 "use client";
 
 import { useState } from "react";
@@ -51,6 +52,7 @@ export default function UserButton({
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
+  //使用 signOut() 清除用户会话，登出成功后跳转到登录页。
   const onSignOut = async () => {
     await signOut({
       fetchOptions: {
@@ -72,7 +74,7 @@ export default function UserButton({
     }
   };
 
-  // Get user initials for avatar fallback
+  // 定义工具函数，用于格式化用户信息（头像首字母、日期格式）。
   const getUserInitials = (name: string | null, email: string) => {
     if (name) {
       return name
@@ -88,7 +90,7 @@ export default function UserButton({
     return "U";
   };
 
-  // Format member since date
+  // 格式化日期
   const formatMemberSince = (date: Date) => {
     return new Intl.DateTimeFormat("en-US", {
       month: "long",
@@ -103,7 +105,7 @@ export default function UserButton({
     lg: "h-12 w-12",
   };
 
-  // Don't render if no user
+  // 果没有用户信息，直接返回 null，不渲染任何内容
   if (!user) {
     return null;
   }

@@ -30,7 +30,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {/* 数据查询 */}
         <QueryProvider>
+        {/* 主题切换 */}
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

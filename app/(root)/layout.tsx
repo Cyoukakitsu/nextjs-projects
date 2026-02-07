@@ -6,16 +6,20 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 const layout = async ({ children }: { children: React.ReactNode }) => {
+  
+  // 1. 获取会话（auth.api.getSession）：检查是否登录。
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
   const user = await currentUser();
 
+  // 2. 检查会话（如果未登录，重定向到登录页面）。
   if (!session) {
     return redirect("/sign-in");
   }
 
+  //3. 如果有会话，继续渲染页面
   return (
     <div className="flex h-screen overflow-hidden">
       <ChatSidebar user={user} />

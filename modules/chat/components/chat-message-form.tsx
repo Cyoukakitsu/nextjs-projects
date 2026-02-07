@@ -1,3 +1,5 @@
+//这是聊天消息输入表单组件，负责用户输入消息、选择 AI 模型，并处理消息提交。
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -19,9 +21,13 @@ export default function ChatMessageForm({
   initialMessage,
   onMessageChange,
 }: ChatMessageFormProps) {
+
+  //使用 useAIModels 钩子获取 AI 模型数据。
   const { data: models, isPending } = useAIModels();
 
   const [message, setMessage] = useState("");
+  
+  //使用 models 数据中的第一个模型 ID 作为默认选中的模型。
   const [selectedModel, setSelectedModel] = useState(
     models?.models?.[0]?.id ?? "",
   );
@@ -33,6 +39,7 @@ export default function ChatMessageForm({
     }
   }, [initialMessage, onMessageChange]);
 
+  //处理表单提交，防止默认行为（页面刷新），显示提示消息，清空输入框。
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     try {
       e.preventDefault();
@@ -57,6 +64,8 @@ export default function ChatMessageForm({
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Type your message here..."
             className="min-h-15 max-h-50 resize-none border-0 bg-transparent px-4 py-3 text-base focus-visible:ring-0 focus-visible:ring-offset-0 "
+            
+            //监听键盘事件
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
