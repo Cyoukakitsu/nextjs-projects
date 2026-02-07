@@ -23,22 +23,21 @@ import { Input } from "@/components/ui/input";
 type Model = {
   id: string;
   name: string;
-  description: string;
-  context_length: number;
-  architecture: {
-    modality: string;
-    tokenizer: string;
-    input_modalities: string[];
-    output_modalities: string[];
+  description?: string;
+  context_length?: number | null;
+  architecture?: {
+    modality?: string;
+    tokenizer?: string;
+    input_modalities?: string[];
+    output_modalities?: string[];
   };
-  pricing: {
-    prompt: string;
-    completion: string;
-    request: string;
+  pricing?: {
+    prompt?: string;
+    completion?: string;
   };
-  top_provider: {
-    max_completion_tokens: number;
-    is_moderated: boolean;
+  top_provider?: {
+    max_completion_tokens?: number | null;
+    is_moderated?: boolean;
   };
 };
 
@@ -62,17 +61,16 @@ export function ModelSelector({
 
   const selectedModel = models.find((m) => m.id === selectedModelId);
 
-  const formatContextLength = (length: number) => {
+  const formatContextLength = (length?: number | null) => {
+    if (length == null) return "N/A";
     if (length >= 1000000) return `${(length / 1000000).toFixed(1)}M`;
     if (length >= 1000) return `${(length / 1000).toFixed(0)}K`;
     return length.toString();
   };
 
-  const isFreeModel = (model: Model) => {
+  const isFreeModel = (model: Model): boolean => {
     return (
-      model.pricing.prompt === "0" &&
-      model.pricing.completion === "0" &&
-      model.pricing.request === "0"
+      model.pricing?.prompt === "0" && model.pricing?.completion === "0"
     );
   };
 
@@ -86,9 +84,9 @@ export function ModelSelector({
     const query = searchQuery.toLowerCase();
     return (
       model.name.toLowerCase().includes(query) ||
-      model.description.toLowerCase().includes(query) ||
+      (model.description?.toLowerCase().includes(query) ?? false) ||
       model.id.toLowerCase().includes(query) ||
-      model.architecture.modality.toLowerCase().includes(query)
+      (model.architecture?.modality?.toLowerCase().includes(query) ?? false)
     );
   });
 
@@ -182,7 +180,7 @@ export function ModelSelector({
                         </span>
                         <span>•</span>
                         <span className="capitalize">
-                          {model.architecture.modality.replace("->", " → ")}
+                          {model.architecture?.modality?.replace("->", " → ") ?? "N/A"}
                         </span>
                       </div>
                     </div>
@@ -204,8 +202,8 @@ export function ModelSelector({
       </Popover>
 
       <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
-          <DialogHeader>
+        <DialogContent className="max-w-2xl max-h-[80vh] flex flex-col overflow-hidden">
+          <DialogHeader className="shrink-0">
             <DialogTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5" />
               {selectedForDetails?.name}
@@ -214,9 +212,9 @@ export function ModelSelector({
               Detailed information about this AI model
             </DialogDescription>
           </DialogHeader>
-          <ScrollArea className="flex-1 pr-4">
+          <div className="flex-1 overflow-y-auto pr-4">
             {selectedForDetails && (
-              <div className="space-y-6">
+              <div className="space-y-6 pb-4">
                 {/* Description */}
                 <div>
                   <h3 className="text-sm font-semibold mb-2">Description</h3>
@@ -246,7 +244,7 @@ export function ModelSelector({
                       </p>
                       <p className="text-sm font-medium">
                         {formatContextLength(
-                          selectedForDetails.top_provider.max_completion_tokens,
+                          selectedForDetails.top_provider?.max_completion_tokens,
                         )}{" "}
                         tokens
                       </p>
@@ -254,16 +252,16 @@ export function ModelSelector({
                     <div className="space-y-1">
                       <p className="text-xs text-muted-foreground">Modality</p>
                       <p className="text-sm font-medium capitalize">
-                        {selectedForDetails.architecture.modality.replace(
+                        {selectedForDetails.architecture?.modality?.replace(
                           "->",
                           " → ",
-                        )}
+                        ) ?? "N/A"}
                       </p>
                     </div>
                     <div className="space-y-1">
                       <p className="text-xs text-muted-foreground">Tokenizer</p>
                       <p className="text-sm font-medium">
-                        {selectedForDetails.architecture.tokenizer}
+                        {selectedForDetails.architecture?.tokenizer ?? "N/A"}
                       </p>
                     </div>
                   </div>
@@ -280,7 +278,7 @@ export function ModelSelector({
                         Input Modalities
                       </p>
                       <div className="flex flex-wrap gap-1">
-                        {selectedForDetails.architecture.input_modalities.map(
+                        {(selectedForDetails.architecture?.input_modalities ?? []).map(
                           (modality) => (
                             <Badge
                               key={modality}
@@ -298,7 +296,7 @@ export function ModelSelector({
                         Output Modalities
                       </p>
                       <div className="flex flex-wrap gap-1">
-                        {selectedForDetails.architecture.output_modalities.map(
+                        {(selectedForDetails.architecture?.output_modalities ?? []).map(
                           (modality) => (
                             <Badge
                               key={modality}
@@ -328,7 +326,7 @@ export function ModelSelector({
                     </div>
                   ) : (
                     <div className="grid grid-cols-2 gap-3">
-                      {Object.entries(selectedForDetails.pricing).map(
+                      {Object.entries(selectedForDetails.pricing ?? {}).map(
                         ([key, value]) => {
                           if (value === "0") return null;
                           return (
@@ -357,12 +355,12 @@ export function ModelSelector({
                       </span>
                       <Badge
                         variant={
-                          selectedForDetails.top_provider.is_moderated
+                          selectedForDetails.top_provider?.is_moderated
                             ? "default"
                             : "secondary"
                         }
                       >
-                        {selectedForDetails.top_provider.is_moderated
+                        {selectedForDetails.top_provider?.is_moderated
                           ? "Enabled"
                           : "Disabled"}
                       </Badge>
@@ -378,7 +376,7 @@ export function ModelSelector({
                 </div>
               </div>
             )}
-          </ScrollArea>
+          </div>
         </DialogContent>
       </Dialog>
     </>

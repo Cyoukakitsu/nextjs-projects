@@ -46,16 +46,15 @@ const ChatSidebar = ({ user }: ChatSidebarProps) => {
   };
 
   return (
-    // Header
-    <div className="flex h-full w-64 flex-col border-r border-border bg-sidebar ">
-      <div className="flex items-center justify-between border-b border-sidebar-border mt-5">
-        <div className="flex items-center gap-2">
-          <Image src={"/logo.svg"} alt="logo" width={100} height={100} />
-        </div>
+    <div className="flex h-full w-64 flex-col border-r border-border bg-sidebar">
+      {/* Header - Logo */}
+      <div className="flex items-center gap-2 p-4">
+        <Image src={"/logo.svg"} alt="logo" width={28} height={28} />
+        <span className="font-semibold text-sidebar-foreground">T3.chat</span>
       </div>
 
       {/* New Chat Button */}
-      <div className="p-4 mt-10">
+      <div className="p-4 pt-0">
         <Link href={"/"}>
           <Button className="w-full">
             <PlusIcon className="mr-2 h-4 w-4" />
