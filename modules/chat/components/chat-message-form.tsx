@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
 import { ModelSelector } from "./model-selector";
 import { useAIModels } from "@/modules/ai-agent/hook/ai-agent";
+import { useCreateChat } from "../hook/chat";
 
 type ChatMessageFormProps = {
   initialMessage?: string;
@@ -26,6 +27,8 @@ export default function ChatMessageForm({
   const { data: models, isPending } = useAIModels();
 
   const [message, setMessage] = useState("");
+
+  const { mutateAsync, isPending: isChatPending } = useCreateChat()
   
   //使用 models 数据中的第一个模型 ID 作为默认选中的模型。
   const [selectedModel, setSelectedModel] = useState(
@@ -44,6 +47,7 @@ export default function ChatMessageForm({
     try {
       e.preventDefault();
 
+      await mutateAsync({ content: message, model: selectedModel });
       toast.success("Message sent successfully");
     } catch (error) {
       console.error("Error sending message:", error);
@@ -95,7 +99,7 @@ export default function ChatMessageForm({
             {/* Submit Button */}
             <Button
               type="submit"
-              disabled={!message.trim()}
+              disabled={!message.trim() || isChatPending}
               size="sm"
               variant={message.trim() ? "default" : "ghost"}
               className="h-8 w-8 p-0 rounded-full "
@@ -104,9 +108,17 @@ export default function ChatMessageForm({
                 message.trim() ? "Send message" : "Enter a message to enable"
               }
             >
-              <Send className="h-4 w-4" />
-              <span className="sr-only">Send message</span>
-            </Button>
+              {isChatPending ? (
+                <>
+                <Spinner/>
+                </>
+              ) : (
+                <>
+                <Send className="h-4 w-4" />
+                <span className="sr-only">Send message</span>
+              </>
+              )}
+              </Button>
           </div>
         </div>
       </form>
